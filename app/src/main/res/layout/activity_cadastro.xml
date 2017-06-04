@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+
+    <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar3" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:orientation="vertical"
+    android:id="@+id/llinputs">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Está cursando?"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:layout_marginStart="19dp"/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="19dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sim"
+            android:layout_marginEnd="10dp"/>
+
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Não"/>
+
+    </RadioGroup>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_ies_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/edit_ies"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:hint="Instituição de Ensino (Preencha se marcou 'Sim')"/>
+
+
+
+    </android.support.design.widget.TextInputLayout>
+
+
+
+</LinearLayout>
+
+    <Button
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:elevation="5dp"
+        android:text="Próximo"
+        android:textColor="@color/colorPrimary"
+        android:clickable="true"
+        android:layout_below="@+id/llinputs"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

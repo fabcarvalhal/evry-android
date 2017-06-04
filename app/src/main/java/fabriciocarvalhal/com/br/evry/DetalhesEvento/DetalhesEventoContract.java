@@ -21,6 +21,7 @@ public interface DetalhesEventoContract {
 
         void loadEvent(int event_id);
         void openEvent(Evento event);
+        void addEventToMyList(Evento event);
 
     }
 

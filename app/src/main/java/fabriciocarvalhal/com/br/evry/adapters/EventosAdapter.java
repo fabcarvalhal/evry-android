@@ -82,10 +82,18 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
             holder.mark_event.setBackgroundResource(R.drawable.bookmark_check);
         }
 
+        holder.mark_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mUserActionsListener.addEventToMyList(getItem(position));
+            }
+        });
 
         holder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mUserActionsListener.openEventDetails(getItem(position),position);
             }
         });
@@ -132,7 +140,7 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
 
             tv_data = (TextView) itemView.findViewById(R.id.tv_data);
 
-           ;
+
         }
 
 

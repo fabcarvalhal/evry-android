@@ -29,5 +29,7 @@ public interface EventosContract {
 
 
         void openEventDetails(@NonNull Evento requestedEvent,int position);
+
+        void addEventToMyList(Evento ev);
     }
 }

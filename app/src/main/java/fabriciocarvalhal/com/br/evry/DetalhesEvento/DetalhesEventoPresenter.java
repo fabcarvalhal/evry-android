@@ -1,6 +1,9 @@
 package fabriciocarvalhal.com.br.evry.DetalhesEvento;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -9,6 +12,7 @@ import com.google.gson.Gson;
 
 import java.util.Map;
 
+import fabriciocarvalhal.com.br.evry.Login.LoginActivity;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
 import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
@@ -50,6 +54,18 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
     public void openEvent(Evento event) {
         if(event != null)
             eventoDetalheView.showEvent(event);
+    }
+
+    @Override
+    public void addEventToMyList(Evento event) {
+        SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
+
+        if(shared.contains("userid")){
+            Log.i("tem","o userid");
+        }else{
+            Intent it = new Intent(activity, LoginActivity.class);
+            activity.startActivity(it);
+        }
     }
 
     @Override

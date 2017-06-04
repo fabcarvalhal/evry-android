@@ -76,6 +76,11 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
     }
 
     @Override
+    public void addEventToMyList(Evento ev) {
+        Log.i("aaa",ev.getData_fim());
+    }
+
+    @Override
     public Map<String, String> doBefore() {
         return null;
     }

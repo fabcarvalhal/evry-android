@@ -31,6 +31,7 @@ public class DetalhesEventoFragment extends Fragment implements  DetalhesEventoC
     private TextView tv_titulo,tv_data,tv_desc;
     private FloatingActionButton fabbtnAddOrRemoveEvent;
     private int event_id;
+    private Evento evento;
 
 
     public DetalhesEventoFragment() {
@@ -71,7 +72,12 @@ public class DetalhesEventoFragment extends Fragment implements  DetalhesEventoC
         tv_desc = (TextView) view.findViewById(R.id.tv_desc);
         tv_data = (TextView) view.findViewById(R.id.tv_data);
         fabbtnAddOrRemoveEvent = (FloatingActionButton) view.findViewById(R.id.btnAddOrRemoveEvent);
-
+        fabbtnAddOrRemoveEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUserActionsListener.addEventToMyList(evento);
+            }
+        });
 
     }
 
@@ -89,6 +95,8 @@ public class DetalhesEventoFragment extends Fragment implements  DetalhesEventoC
     public void showEvent(Evento event) {
 
         if (event != null) {
+            this.evento = event;
+
             Glide.with(getActivity())
                     .load(event.getImagem())
                     .fitCenter().crossFade()
@@ -96,6 +104,9 @@ public class DetalhesEventoFragment extends Fragment implements  DetalhesEventoC
             tv_titulo.setText(event.getNome());
             tv_desc.setText(event.getDetalhes());
             tv_data.setText(event.getData_ini() + " à " + event.getData_fim());
+
+
+
 
             if(event.getIsOnUserEvents().equals("1")){
 
@@ -108,6 +119,8 @@ public class DetalhesEventoFragment extends Fragment implements  DetalhesEventoC
                     fabbtnAddOrRemoveEvent.setImageDrawable(getResources().getDrawable(R.drawable.ic_bookmark_grey600_24dp));
 
             }
+
+
         }
     }
 }
