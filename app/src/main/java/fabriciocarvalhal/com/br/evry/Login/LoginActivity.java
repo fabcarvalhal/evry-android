@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements  GoogleApiClient
             startActivity(it);
             Log.i("Logado como:", acct.getDisplayName());
         } else {
+            Log.i("ERRO LOGIN", result.getStatus().toString());
             // Signed out, show unauthenticated UI.
         }
     }

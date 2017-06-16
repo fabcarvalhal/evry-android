@@ -37,6 +37,7 @@ public class EventosFragment extends Fragment implements EventosContract.View{
     private EventosAdapter adapter;
     private boolean preenchido = false;
     private View view;
+    private RecyclerView menuRecyclerView;
 
     public EventosFragment() {
         // Required empty public constructor
@@ -83,6 +84,8 @@ public class EventosFragment extends Fragment implements EventosContract.View{
                 mUserActionsListener.loadEvents(true,true);
             }
         });
+
+
 
         //configurando RecyclerView
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView_books);
