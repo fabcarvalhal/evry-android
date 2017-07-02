@@ -1,29 +1,24 @@
 package fabriciocarvalhal.com.br.evry.Eventos;
 
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
-import fabriciocarvalhal.com.br.evry.model.Evento;
-import android.app.Activity;
-import fabriciocarvalhal.com.br.evry.model.ResponseEventos;
-import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
-import fabriciocarvalhal.com.br.evry.util_conection.TentarNovamente;
-import fabriciocarvalhal.com.br.evry.util_conection.TestarConexao;
-import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
-import fabriciocarvalhal.com.br.evry.util_conection.ResponseConnection;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import fabriciocarvalhal.com.br.evry.model.Evento;
+import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
+import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
+import fabriciocarvalhal.com.br.evry.util_conection.ResponseConnection;
+import fabriciocarvalhal.com.br.evry.util_conection.TentarNovamente;
+import fabriciocarvalhal.com.br.evry.util_conection.TestarConexao;
 
 /**
  * Created by Fabrício Carvalhal on 20/05/2017.

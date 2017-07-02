@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -16,19 +18,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import fabriciocarvalhal.com.br.evry.Cadastro.CadastroActivity;
+import java.util.HashMap;
+import java.util.Map;
+
 import fabriciocarvalhal.com.br.evry.R;
+import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
+import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
+import fabriciocarvalhal.com.br.evry.util_conection.ResponseConnection;
 
 /**
  * Created by Fabrício Carvalhal on 03/06/2017.
  */
 
-public class LoginActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener,
+public class LoginActivity extends AppCompatActivity implements ResponseConnection, GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
     private Toolbar mToolbar;
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
+    private String url = "http://evry.esy.es/api/login";
+    private String id, tipo_conta, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,19 +121,50 @@ public class LoginActivity extends AppCompatActivity implements  GoogleApiClient
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("aa", "handleSignInResult:" + result.isSuccess());
+        Log.d("aa", "handleSignInResult:" + result.getStatus());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Intent it = new Intent(this, CadastroActivity.class);
+            /*Intent it = new Intent(this, CadastroActivity.class);
+
             it.putExtra("nome_usuario", result.getSignInAccount().getDisplayName());
             it.putExtra("email_usuario", result.getSignInAccount().getEmail());
-            startActivity(it);
-            Log.i("Logado como:", acct.getDisplayName());
+            startActivity(it);*/
+            Log.i("Logado como:", result.getSignInAccount().getId());
+
+            this.id = result.getSignInAccount().getId();
+            this.email = result.getSignInAccount().getEmail();
+            this.tipo_conta = "GOOGLE";
+            NetworkConnection.getInstance(this).conectionVolley(this,url,Request.Method.POST);
         } else {
+
             // Signed out, show unauthenticated UI.
         }
     }
 
 
+    @Override
+    public Map<String, String> doBefore() {
+        Map<String, String> params = new HashMap<>();
+        params.put("id_conta_delegada",id);
+        params.put("tipo",tipo_conta);
+        params.put("email",email);
+
+        Log.i("dsd",params.toString());
+        return params;
+
+    }
+
+    @Override
+    public void doAfter(BaseRequest object) {
+        if(!object.isErro()){
+
+            Log.i("login server", object.toString());
+        }
+    }
+
+    @Override
+    public void erroServer(VolleyError error) {
+
+    }
 }
