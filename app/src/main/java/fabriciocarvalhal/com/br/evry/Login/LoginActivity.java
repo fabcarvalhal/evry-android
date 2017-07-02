@@ -138,7 +138,8 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
             NetworkConnection.getInstance(this).conectionVolley(this,url,Request.Method.POST);
         } else {
 
-            // Signed out, show unauthenticated UI.
+            Log.i("ERRO LOGIN", result.getStatus().toString());
+
         }
     }
 

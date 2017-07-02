@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimary"
-    tools:context=".Login.LoginActivity">
+    tools:context=".Login.LoginActivity"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"

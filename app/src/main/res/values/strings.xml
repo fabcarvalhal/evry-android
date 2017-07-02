@@ -1,6 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">app-evry</string>
     <string name="txt_erro_conexao">Não foi possível comunicar com o servidor.</string>
     <string name="dwopen">Abrindo</string>
     <string name="dwclose">Fechando</string>
+
+
+
+
+    <string-array name="cursos_array">
+        <item>----</item>
+        <item>Análise e Desenvolvimento de Sistemas</item>
+        <item>Ciências da Computação</item>
+        <item>Arquitetura</item>
+        <item>Design</item>
+        <item>Gestão de TI</item>
+        <item>Enfermagem</item>
+        <item>Psicologia</item>
+        <item>Gastronomia</item>
+    </string-array>
+
 </resources>
