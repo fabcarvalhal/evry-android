@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private String url = "http://evry.esy.es/api/login";
-    private String id, tipo_conta, email;
+    private String id, tipo_conta, email, nome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
 
             this.id = result.getSignInAccount().getId();
             this.email = result.getSignInAccount().getEmail();
+            this.nome = result.getSignInAccount().getDisplayName();
             this.tipo_conta = "GOOGLE";
             NetworkConnection.getInstance(this).conectionVolley(this,url,Request.Method.POST);
         } else {
@@ -150,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
         params.put("id_conta_delegada",id);
         params.put("tipo",tipo_conta);
         params.put("email",email);
-
+        params.put("nome", nome);
         Log.i("dsd",params.toString());
         return params;
 
@@ -158,11 +159,11 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
 
     @Override
     public void doAfter(BaseRequest object) {
-        if(!object.isErro()){
 
-            Log.i("login server", object.toString());
-        }
+
     }
+
+
 
     @Override
     public void erroServer(VolleyError error) {
