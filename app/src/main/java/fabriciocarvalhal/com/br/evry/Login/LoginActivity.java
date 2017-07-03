@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -159,8 +160,8 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
 
     @Override
     public void doAfter(BaseRequest object) {
-
-
+        JsonObject j = object.getData().getAsJsonArray("data").getAsJsonObject();
+        j.get("mensagem").getAsString();
     }
 
 
