@@ -1,6 +1,8 @@
 package fabriciocarvalhal.com.br.evry.Login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +19,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import fabriciocarvalhal.com.br.evry.Cadastro.CadastroActivity;
 import fabriciocarvalhal.com.br.evry.R;
 import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
 import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
@@ -160,8 +162,28 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
 
     @Override
     public void doAfter(BaseRequest object) {
-        JsonObject j = object.getData().getAsJsonArray("data").getAsJsonObject();
-        j.get("mensagem").getAsString();
+
+        if(object.isErro()){
+            String mensagem = object.getData().get("mensagem").getAsString();
+            if(mensagem.equals("Usuário não encontrado")){
+                Intent it = new Intent(this, CadastroActivity.class);
+                it.putExtra("nome",this.nome);
+                it.putExtra("tipo",this.tipo_conta);
+                it.putExtra("email",this.email);
+                it.putExtra("idgoogle",this.id);
+                startActivity(it);
+            }
+
+        }else{
+
+            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.user_preference_file_key), object.getData().get("userid").getAsString());
+            editor.commit();
+            finish();
+        }
+
+
     }
 
 

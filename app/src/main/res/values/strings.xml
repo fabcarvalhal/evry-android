@@ -5,7 +5,7 @@
     <string name="txt_erro_conexao">Não foi possível comunicar com o servidor.</string>
     <string name="dwopen">Abrindo</string>
     <string name="dwclose">Fechando</string>
-
+    <string name="user_preference_file_key">fabriciocarvalhal.com.br.evry.userid</string>
 
 
 
@@ -20,5 +20,6 @@
         <item>Psicologia</item>
         <item>Gastronomia</item>
     </string-array>
+
 
 </resources>
