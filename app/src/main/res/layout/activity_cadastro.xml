@@ -28,12 +28,14 @@
         android:textColor="#fff"
         />
     <RadioGroup
+        android:id="@+id/rgCursando"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp">
 
         <RadioButton
+            android:id="@+id/rbSim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sim"
@@ -43,9 +45,11 @@
 
 
         <RadioButton
+            android:id="@+id/rbNao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Não"
+            android:checked="true"
             android:textColor="#fff"
             android:buttonTint="#fff"/>
 
@@ -93,6 +97,7 @@
 </LinearLayout>
 
     <Button
+        android:id="@+id/btnProximo"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

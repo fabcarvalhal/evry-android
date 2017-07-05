@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/celulaInt"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <TextView
+        android:id="@+id/nome"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:text="Interesse com nome bem grande"
+        android:layout_marginStart="20dp"
+        android:gravity="center_vertical"
+        android:textColor="#111111"
+        android:textSize="16dip"/>
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/checkboxcustom"
+        android:layout_marginEnd="28dp"
+        android:checked="true"/>
+
+</RelativeLayout>
