@@ -103,11 +103,11 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
                 int selectedId = radioGroup.getCheckedRadioButtonId();
                 if(selectedId == R.id.rbSim){
                     if(cursoSelecionado == null){
-                        Toast.makeText(CadastroActivity.this,"Por favor selecione o curso",Toast.LENGTH_SHORT);
+                        Toast.makeText(CadastroActivity.this,"Por favor selecione o curso",Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if(txtInstituicao.getText().equals("")){
-                        Toast.makeText(CadastroActivity.this,"Por favor preencha ", Toast.LENGTH_SHORT);
+                    if(txtInstituicao.getText().toString().trim().length() == 0){
+                        Toast.makeText(CadastroActivity.this,"Por favor preencha ", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
