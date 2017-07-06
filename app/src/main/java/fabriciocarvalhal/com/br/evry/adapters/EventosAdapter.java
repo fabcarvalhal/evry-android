@@ -7,25 +7,19 @@ package fabriciocarvalhal.com.br.evry.adapters;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import fabriciocarvalhal.com.br.evry.model.Evento;
+
+import java.util.List;
+
 import fabriciocarvalhal.com.br.evry.Eventos.EventosContract;
 import fabriciocarvalhal.com.br.evry.R;
-
-import java.sql.SQLOutput;
-import java.util.List;
-import java.util.logging.Logger;
-
-import fabriciocarvalhal.com.br.evry.Eventos.EventosContract;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -37,6 +31,7 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
     private List<Evento> mlista;
     private Context c;
     private EventosContract.UserActionsListener mUserActionsListener;
+
 
     public EventosAdapter(Context c, List<Evento> b, EventosContract.UserActionsListener mUserActionsListener) {
 

@@ -20,6 +20,7 @@
         <activity android:name=".DetalhesEvento.DetalhesEventoActivity" ></activity>
         <activity android:name=".Login.LoginActivity"></activity>
         <activity android:name=".Cadastro.CadastroActivity"></activity>
+        <activity android:name=".Interesses.InteressesActivity"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

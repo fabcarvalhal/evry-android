@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-evry.iml" filepath="$PROJECT_DIR$/app-evry.iml" />
       <module fileurl="file://$PROJECT_DIR$/every-android.iml" filepath="$PROJECT_DIR$/every-android.iml" />
     </modules>
   </component>
