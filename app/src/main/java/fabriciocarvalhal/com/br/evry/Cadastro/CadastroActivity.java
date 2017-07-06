@@ -52,6 +52,9 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
     private String email;
     private String tipo;
     private String id;
+    private int cursando;
+    private int curso;
+    private String instituicao;
 
 
     @Override
@@ -98,17 +101,45 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
 
                 // get selected radio button from radioGroup
                 int selectedId = radioGroup.getCheckedRadioButtonId();
+                if(selectedId == R.id.rbSim){
+                    if(cursoSelecionado == null){
+                        Toast.makeText(CadastroActivity.this,"Por favor selecione o curso",Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    if(txtInstituicao.getText().equals("")){
+                        Toast.makeText(CadastroActivity.this,"Por favor preencha ", Toast.LENGTH_SHORT);
+                        return;
+                    }
+
+                    cursando = 1;
+                    curso = cursoSelecionado.getId();
+                    instituicao = txtInstituicao.getText().toString();
+                }else{
+                    cursando = 0;
+                    curso = 0;
+                    instituicao = "";
+
+                }
 
                 // find the radiobutton by returned id
                 radioButton = (RadioButton) findViewById(selectedId);
-                Intent it = new Intent(CadastroActivity.this,InteressesActivity.class);
-                startActivity(it);
-                /*Toast.makeText(CadastroActivity.this,
-                        radioButton.getText(), Toast.LENGTH_SHORT).show();*/
+
+                openInteresses();
 
             }
 
         });
+    }
+
+    private void openInteresses(){
+        Intent it = new Intent(CadastroActivity.this,InteressesActivity.class);
+        it.putExtra("nome",nome);
+        it.putExtra("email",email);
+        it.putExtra("id",id);
+        it.putExtra("cursando",cursando);
+        it.putExtra("curso",curso);
+        it.putExtra("instituicao",instituicao);
+        startActivity(it);
     }
 
     private void loadSpinner(){

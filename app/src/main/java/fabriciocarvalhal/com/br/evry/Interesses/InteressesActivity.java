@@ -1,5 +1,6 @@
 package fabriciocarvalhal.com.br.evry.Interesses;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,15 @@ public class InteressesActivity extends AppCompatActivity implements InteressesC
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interesses);
+        Intent it = getIntent();
+        if (it != null){
+            Bundle extras = it.getExtras();
+            if(extras != null){
+                Log.i("extras",String.valueOf(extras.getInt("curso")) );
+            }
+        }
+
+
         rcvInteresses = (RecyclerView) findViewById(R.id.recyclerView_interesses);
         adapter = new InteressesAdapter(this,new ArrayList<Interesse>(),this);
         rcvInteresses.setAdapter(adapter);
