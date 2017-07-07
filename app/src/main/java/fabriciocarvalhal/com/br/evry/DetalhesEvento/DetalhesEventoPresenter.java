@@ -63,6 +63,7 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
         if(shared.contains("userid")){
             Log.i("tem","o userid");
         }else{
+            Log.i("SHARED", shared.getString("userid","nao tem"));
             Intent it = new Intent(activity, LoginActivity.class);
             activity.startActivity(it);
         }

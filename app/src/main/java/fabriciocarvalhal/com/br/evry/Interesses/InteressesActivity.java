@@ -1,6 +1,5 @@
 package fabriciocarvalhal.com.br.evry.Interesses;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -63,7 +62,7 @@ public class InteressesActivity extends AppCompatActivity implements InteressesC
             if(extras != null){
                 this.nome = extras.getString("nome");
                 this.email = extras.getString("email");
-                this.tipo_conta = extras.getString("tipo_conta") == "google" ? "1" : "0";
+                this.tipo_conta = extras.getString("tipo");
                 this.id = extras.getString("id");
                 this.cursando = extras.getInt("cursando");
                 this.curso = extras.getInt("curso");
@@ -121,7 +120,7 @@ public class InteressesActivity extends AppCompatActivity implements InteressesC
 
     @Override
     public Map<String, String> doBefore() {
-        if(tipo_requisicao == "finishCadastro"){
+        if(tipo_requisicao.equals("finishCadastro")){
             Map<String, String> params = new HashMap<>();
             params.put("nome", nome);
             params.put("id_conta_delegada",id);
@@ -160,16 +159,18 @@ public class InteressesActivity extends AppCompatActivity implements InteressesC
 
                 adapter.replaceData(interessesList);
                 this.tipo_requisicao = null;
-            }
-        }else if (this.tipo_requisicao.equals("finishCadastro") ){
+            }else if (this.tipo_requisicao.equals("finishCadastro") ){
 
-            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("userid", object.getData().get("userid").getAsInt());
-            editor.putString("user_name", this.nome);
-            editor.putString("urlPhoto",this.urlPhoto);
-            editor.commit();
-            finish();
+                SharedPreferences sharedPref =getApplicationContext().getSharedPreferences("shared",0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("userid", object.getData().get("userid").getAsInt());
+                editor.putString("user_name", this.nome);
+                editor.putString("urlPhoto",this.urlPhoto);
+                editor.commit();
+
+                finish();
+
+            }
         }
     }
 

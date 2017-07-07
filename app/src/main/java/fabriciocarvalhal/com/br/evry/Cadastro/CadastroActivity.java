@@ -141,7 +141,9 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
         it.putExtra("curso",curso);
         it.putExtra("instituicao",instituicao);
         it.putExtra("urlPhoto", urlPhoto);
+        it.putExtra("tipo", tipo);
         startActivity(it);
+        finish();
     }
 
     private void loadSpinner(){
