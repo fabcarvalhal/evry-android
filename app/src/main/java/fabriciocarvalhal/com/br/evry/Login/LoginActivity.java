@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private String url = "http://evry.esy.es/api/login";
-    private String id, tipo_conta, email, nome;
+    private String id, tipo_conta, email, nome,urlPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
             this.email = result.getSignInAccount().getEmail();
             this.nome = result.getSignInAccount().getDisplayName();
             this.tipo_conta = "GOOGLE";
+            this.urlPhoto = result.getSignInAccount().getPhotoUrl().toString();
             NetworkConnection.getInstance(this).conectionVolley(this,url,Request.Method.POST);
         } else {
 
@@ -171,6 +172,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
                 it.putExtra("tipo",this.tipo_conta);
                 it.putExtra("email",this.email);
                 it.putExtra("idgoogle",this.id);
+                it.putExtra("urlPhoto",this.urlPhoto);
                 startActivity(it);
             }
 
@@ -178,7 +180,9 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
 
             SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.user_preference_file_key), object.getData().get("userid").getAsString());
+            editor.putString("userid", object.getData().get("userid").getAsString());
+            editor.putString("user_name", this.nome);
+            editor.putString("urlPhoto",this.urlPhoto);
             editor.commit();
             finish();
         }

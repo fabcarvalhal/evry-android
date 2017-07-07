@@ -2,7 +2,6 @@ package fabriciocarvalhal.com.br.evry.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +59,11 @@ public class InteressesAdapter extends RecyclerView.Adapter<InteressesAdapter.Vi
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    if(mUserActionsListener.getInteressesCount() == 2){
+                        mUserActionsListener.showAlertaQtdInteresse();
+                        buttonView.setChecked(false);
+                        return;
+                    }
                     mUserActionsListener.addInteresse(mInteresses.get(position).getId());
                 }else{
                     mUserActionsListener.removeInteresse(mInteresses.get(position).getId());
@@ -69,7 +73,6 @@ public class InteressesAdapter extends RecyclerView.Adapter<InteressesAdapter.Vi
     }
 
     public void replaceData(List<Interesse> in){
-        Log.i("setando", " set interesses");
         setList(in);
         notifyDataSetChanged();
     }

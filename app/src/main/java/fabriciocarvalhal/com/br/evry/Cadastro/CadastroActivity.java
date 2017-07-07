@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -55,6 +54,7 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
     private int cursando;
     private int curso;
     private String instituicao;
+    private String urlPhoto;
 
 
     @Override
@@ -77,6 +77,7 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
                 email= extras.getString("email");
                 tipo = extras.getString("tipo");
                 id   = extras.getString("idgoogle");
+                urlPhoto = extras.getString("urlPhoto");
             }
         }
 
@@ -139,6 +140,7 @@ public class CadastroActivity extends AppCompatActivity implements ResponseConne
         it.putExtra("cursando",cursando);
         it.putExtra("curso",curso);
         it.putExtra("instituicao",instituicao);
+        it.putExtra("urlPhoto", urlPhoto);
         startActivity(it);
     }
 
