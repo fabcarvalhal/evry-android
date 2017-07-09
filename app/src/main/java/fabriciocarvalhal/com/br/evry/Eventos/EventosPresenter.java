@@ -51,6 +51,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
     private boolean isFiltered = false;
     private String url_menuItens = "http://evry.esy.es/api/cursos";
     private boolean isMenuLoad = false;
+    private boolean isEventLoad=  false;
 
     public EventosPresenter(Activity activity , EventosContract.View eventosView){
 
@@ -64,7 +65,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
     @Override
     public void loadEvents(boolean forceUpdate,boolean fromRefresh) {
         isUpdate = forceUpdate;
-
+        isEventLoad = true;
         if(forceUpdate){
             pagina = 0;
             existNextPage = true;
@@ -81,7 +82,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
                 carregando = true;
                 if (isFiltered) {
-                    NetworkConnection.getInstance(activity).conectionVolley(this, url + userid +"/"+filteredByCourse+ "/" + pagina, Request.Method.GET);
+                    NetworkConnection.getInstance(activity).conectionVolley(this, url_filtered + userid +"/"+filteredByCourse+ "/" + pagina, Request.Method.GET);
                 } else {
                     NetworkConnection.getInstance(activity).conectionVolley(this, url + userid + "/" + pagina, Request.Method.GET);
 
@@ -154,7 +155,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
         if (!object.isErro()){
 
-            if (!this.isAddEvent && !this.isRemoveEvent && !this.isMenuLoad) {
+            if (!this.isAddEvent && !this.isRemoveEvent && !this.isMenuLoad && isEventLoad) {
                 Gson gson = new Gson();
                 List<Evento> eventosList = new ArrayList<>();
 
@@ -176,6 +177,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
                 this.existNextPage = object.getHasNextPage();
                 carregando = false;
+                isEventLoad = false;
                 eventosView.setProgressIndicator(false);
             }else if(this.isRemoveEvent || this.isAddEvent){
                 if(this.isRemoveEvent){
@@ -188,7 +190,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                 this.isRemoveEvent = false;
                 Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
 
-            }else if(isMenuLoad && !this.carregando){
+            }else if(isMenuLoad && !isEventLoad){
                 Gson gson = new Gson();
                 ArrayList<Curso> cursosList = new ArrayList<>();
                 Curso[] cursos = gson.fromJson(object.getData().getAsJsonArray("cursos"), Curso[].class);
@@ -197,6 +199,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                     c.setNome(c.getNome());
                     cursosList.add(c);
                 }
+                this.isMenuLoad = false;
                 eventosView.showMenuItens(cursosList);
             }
         }else{

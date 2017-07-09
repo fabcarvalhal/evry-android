@@ -7,6 +7,8 @@ package fabriciocarvalhal.com.br.evry.Eventos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -197,10 +199,18 @@ public class EventosFragment extends Fragment implements EventosContract.View{
     public void onResume() {
         super.onResume();
         if (!preenchido) {
+
             mUserActionsListener.loadEvents(true, false);
-            mUserActionsListener.loadMenuCursos();
+
             preenchido = true;
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   mUserActionsListener.loadMenuCursos();
+                }
+            }, 3000);
         }
+
     }
 
 }
