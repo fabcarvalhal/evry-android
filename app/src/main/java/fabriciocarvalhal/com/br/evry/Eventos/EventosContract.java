@@ -1,8 +1,10 @@
 package fabriciocarvalhal.com.br.evry.Eventos;
 
 import android.support.annotation.NonNull;
-import fabriciocarvalhal.com.br.evry.model.Evento;
+
 import java.util.List;
+
+import fabriciocarvalhal.com.br.evry.model.Evento;
 
 /**
  * * Created by Fabrício Carvalhal on 20/05/2017.
@@ -20,6 +22,7 @@ public interface EventosContract {
         void moreEvents(List<Evento> eventos);
 
         void showEventDetailUi(int noteId,int position);
+        void updateItemCheckMark(int position,boolean status);
 
     }
 
@@ -30,6 +33,6 @@ public interface EventosContract {
 
         void openEventDetails(@NonNull Evento requestedEvent,int position);
 
-        void addEventToMyList(Evento ev);
+        void addEventToMyList(Evento ev,int position);
     }
 }

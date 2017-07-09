@@ -47,6 +47,7 @@
 
 <!-- The navigation drawer -->
 
+    
 <android.support.v7.widget.RecyclerView
     android:id="@+id/left_drawer_lista"
     android:layout_width="300dp"

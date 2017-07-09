@@ -12,19 +12,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import fabriciocarvalhal.com.br.evry.DetalhesEvento.DetalhesEventoActivity;
-import fabriciocarvalhal.com.br.evry.model.Evento;
-import fabriciocarvalhal.com.br.evry.R;
-import fabriciocarvalhal.com.br.evry.adapters.EventosAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import fabriciocarvalhal.com.br.evry.DetalhesEvento.DetalhesEventoActivity;
+import fabriciocarvalhal.com.br.evry.R;
+import fabriciocarvalhal.com.br.evry.adapters.EventosAdapter;
+import fabriciocarvalhal.com.br.evry.model.Evento;
 
 
 public class EventosFragment extends Fragment implements EventosContract.View{
@@ -158,6 +157,18 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         detalhe.putExtra("event_id", (adapter.getItem(position).getId()));
 
         startActivity(detalhe);
+
+    }
+
+    @Override
+    public void updateItemCheckMark(int position, boolean status) {
+            if(status){
+
+                adapter.getItem(position).setIsOnUserEvents("1");
+            }else{
+                adapter.getItem(position).setIsOnUserEvents("0");
+            }
+            adapter.updateImage(position);
 
     }
 

@@ -81,7 +81,7 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
             @Override
             public void onClick(View v) {
 
-                mUserActionsListener.addEventToMyList(getItem(position));
+                mUserActionsListener.addEventToMyList(getItem(position),position);
             }
         });
 
@@ -103,6 +103,11 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
     private void setList(List<Evento> books) {
         mlista = checkNotNull(books);
     }
+
+    public void updateImage(int position){
+        notifyItemChanged(position);
+    }
+
 
     public Evento getItem(int position){
         return mlista.get(position);

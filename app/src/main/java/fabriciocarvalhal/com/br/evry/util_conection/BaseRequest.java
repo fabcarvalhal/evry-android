@@ -31,6 +31,11 @@ public class BaseRequest {
         this.data = data;
     }
 
+    public boolean getHasNextPage(){
+        return this.hasNextPage;
+    }
+
+    public void setHasNextPage(boolean hasNextPage){this.hasNextPage = hasNextPage;}
     @Override
     public String toString() {
         return "BaseRequest{" +

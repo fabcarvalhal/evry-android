@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import fabriciocarvalhal.com.br.evry.Login.LoginActivity;
@@ -31,10 +33,17 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
     private int cod;
     private String url_event = "http://evry.esy.es/api/event/";
     private Evento evento;
+    private boolean isAddEvent = false;
+    private String url_addEvent = "http://evry.esy.es/api/event/addToList";
+    private boolean isRemoveEvent = false;
+    private String url_removeEvent = "http://evry.esy.es/api/event/removeFromList";
+    private String userid;
 
     public DetalhesEventoPresenter(Activity activity, DetalhesEventoContract.View eventoDetalheView){
         this.eventoDetalheView = eventoDetalheView;
         this.activity = activity;
+        SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
+        this.userid = shared.getString("userid","0");
     }
 
 
@@ -45,7 +54,7 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
 
         if (TestarConexao.VerificaConexao(activity,this)){
 
-            NetworkConnection.getInstance(activity).conectionVolley(this,(url_event+cod), Request.Method.GET);
+            NetworkConnection.getInstance(activity).conectionVolley(this,(url_event+cod+"/"+userid), Request.Method.GET);
         }
 
     }
@@ -61,7 +70,13 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
         SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
 
         if(shared.contains("userid")){
-            Log.i("tem","o userid");
+            if (event.getIsOnUserEvents().equals("0")) {
+                this.isAddEvent = true;
+                NetworkConnection.getInstance(activity).conectionVolley(this, url_addEvent, Request.Method.POST);
+            }else{
+                this.isRemoveEvent = true;
+                NetworkConnection.getInstance(activity).conectionVolley(this, url_removeEvent, Request.Method.POST);
+            }
         }else{
             Log.i("SHARED", shared.getString("userid","nao tem"));
             Intent it = new Intent(activity, LoginActivity.class);
@@ -71,15 +86,34 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
 
     @Override
     public Map<String, String> doBefore() {
+        if(this.isAddEvent || this.isRemoveEvent){
+            Map<String, String> params = new HashMap<>();
+
+            params.put("event_id",String.valueOf(this.evento.getId()) );
+            params.put("user_id",userid);
+            return params;
+        }
         return null;
     }
 
     @Override
     public void doAfter(BaseRequest object) {
         if (!object.isErro()){
-              Gson gson = new Gson();
-              evento = gson.fromJson(object.getData().getAsJsonObject("evento"),Evento.class);
-              this.openEvent(evento);
+            if(!this.isRemoveEvent && !this.isAddEvent) {
+                Gson gson = new Gson();
+                evento = gson.fromJson(object.getData().getAsJsonObject("evento"), Evento.class);
+                this.openEvent(evento);
+            }else if(this.isAddEvent || this.isRemoveEvent){
+                this.isAddEvent = false;
+                this.isRemoveEvent = false;
+                Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
+                this.loadEvent(this.cod);
+            }
+
+        }else{
+            this.isAddEvent = false;
+            this.isRemoveEvent = false;
+            Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
         }
 
 
