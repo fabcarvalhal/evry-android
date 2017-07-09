@@ -58,6 +58,8 @@ public class EventosAdapter extends RecyclerView.Adapter<EventosAdapter.MyViewHo
 
     }
 
+
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 

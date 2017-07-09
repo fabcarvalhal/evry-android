@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import fabriciocarvalhal.com.br.evry.Login.LoginActivity;
+import fabriciocarvalhal.com.br.evry.model.Curso;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 import fabriciocarvalhal.com.br.evry.util_conection.BaseRequest;
 import fabriciocarvalhal.com.br.evry.util_conection.NetworkConnection;
@@ -45,6 +46,11 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
     private String url_removeEvent = "http://evry.esy.es/api/event/removeFromList";
     private int addingOrRemovingEventPosition;
     private int addingOrRemovingEventId;
+    private String url_filtered = "http://evry.esy.es/api/events_bycourse/";
+    private int filteredByCourse = 0;
+    private boolean isFiltered = false;
+    private String url_menuItens = "http://evry.esy.es/api/cursos";
+    private boolean isMenuLoad = false;
 
     public EventosPresenter(Activity activity , EventosContract.View eventosView){
 
@@ -52,6 +58,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
         this.eventosView = eventosView;
         SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
         this.userid = shared.getString("userid","0");
+
     }
 
     @Override
@@ -73,10 +80,21 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                     eventosView.setProgressIndicator(true);
 
                 carregando = true;
+                if (isFiltered) {
+                    NetworkConnection.getInstance(activity).conectionVolley(this, url + userid +"/"+filteredByCourse+ "/" + pagina, Request.Method.GET);
+                } else {
+                    NetworkConnection.getInstance(activity).conectionVolley(this, url + userid + "/" + pagina, Request.Method.GET);
 
-                NetworkConnection.getInstance(activity).conectionVolley(this, url+userid, Request.Method.GET);
+                }
             }
+    }
 
+    @Override
+    public void loadMenuCursos() {
+        if(TestarConexao.VerificaConexao(activity,this)) {
+            this.isMenuLoad = true;
+            NetworkConnection.getInstance(activity).conectionVolley(this, url_menuItens, Request.Method.GET);
+        }
     }
 
 
@@ -110,6 +128,13 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
     }
 
     @Override
+    public void filterEventsByCourse(int id) {
+        this.isFiltered = true;
+        this.filteredByCourse = id;
+        this.loadEvents(true,false);
+    }
+
+    @Override
     public Map<String, String> doBefore() {
         if(this.isAddEvent || this.isRemoveEvent){
             Map<String, String> params = new HashMap<>();
@@ -129,7 +154,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
         if (!object.isErro()){
 
-            if (!this.isAddEvent && !this.isRemoveEvent) {
+            if (!this.isAddEvent && !this.isRemoveEvent && !this.isMenuLoad) {
                 Gson gson = new Gson();
                 List<Evento> eventosList = new ArrayList<>();
 
@@ -163,10 +188,22 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                 this.isRemoveEvent = false;
                 Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
 
+            }else if(isMenuLoad && !this.carregando){
+                Gson gson = new Gson();
+                ArrayList<Curso> cursosList = new ArrayList<>();
+                Curso[] cursos = gson.fromJson(object.getData().getAsJsonArray("cursos"), Curso[].class);
+                for(Curso c : cursos){
+                    c.setId(c.getId());
+                    c.setNome(c.getNome());
+                    cursosList.add(c);
+                }
+                eventosView.showMenuItens(cursosList);
             }
         }else{
             this.isAddEvent = false;
             this.isRemoveEvent = false;
+            this.isMenuLoad = false;
+            this.isFiltered = false;
             Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
         }
 
@@ -192,6 +229,9 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
             carregando = true;
             NetworkConnection.getInstance(activity).conectionVolley(this, url, Request.Method.GET);
+            if(this.isMenuLoad){
+                NetworkConnection.getInstance(activity).conectionVolley(this, url_menuItens, Request.Method.GET);
+            }
         }
     }
 

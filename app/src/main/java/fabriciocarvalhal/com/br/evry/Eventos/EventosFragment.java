@@ -22,7 +22,9 @@ import java.util.List;
 
 import fabriciocarvalhal.com.br.evry.DetalhesEvento.DetalhesEventoActivity;
 import fabriciocarvalhal.com.br.evry.R;
+import fabriciocarvalhal.com.br.evry.adapters.DrawerAdapter;
 import fabriciocarvalhal.com.br.evry.adapters.EventosAdapter;
+import fabriciocarvalhal.com.br.evry.model.Curso;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 
 
@@ -36,7 +38,8 @@ public class EventosFragment extends Fragment implements EventosContract.View{
     private EventosAdapter adapter;
     private boolean preenchido = false;
     private View view;
-    private RecyclerView menuRecyclerView;
+    private DrawerAdapter drawerAdapter;
+    private RecyclerView mDrawerRecycleView;
 
     public EventosFragment() {
         // Required empty public constructor
@@ -53,6 +56,9 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         super.onCreate(savedInstanceState);
         mUserActionsListener = new EventosPresenter(getActivity(),this);
         adapter = new EventosAdapter(getActivity(),new ArrayList<Evento>(),mUserActionsListener);
+        drawerAdapter = new DrawerAdapter(getActivity(),new ArrayList<Curso>(),mUserActionsListener);
+
+
     }
 
     @Override
@@ -88,6 +94,7 @@ public class EventosFragment extends Fragment implements EventosContract.View{
 
         //configurando RecyclerView
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView_books);
+        mDrawerRecycleView = (RecyclerView) getActivity().findViewById(R.id.left_drawer_lista);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -114,6 +121,14 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         mRecyclerView.setLayoutManager(llm);
 
         mRecyclerView.setAdapter(adapter);
+
+
+        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
+        llm2.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mDrawerRecycleView.setLayoutManager(llm2);
+        mDrawerRecycleView.setAdapter(drawerAdapter);
+
 
     }
 
@@ -172,12 +187,18 @@ public class EventosFragment extends Fragment implements EventosContract.View{
 
     }
 
+    @Override
+    public void showMenuItens(ArrayList<Curso> cursos) {
+        drawerAdapter.replaceData(cursos);
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
         if (!preenchido) {
             mUserActionsListener.loadEvents(true, false);
+            mUserActionsListener.loadMenuCursos();
             preenchido = true;
         }
     }

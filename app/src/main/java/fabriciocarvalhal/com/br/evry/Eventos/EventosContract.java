@@ -2,8 +2,10 @@ package fabriciocarvalhal.com.br.evry.Eventos;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import fabriciocarvalhal.com.br.evry.model.Curso;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 
 /**
@@ -24,15 +26,18 @@ public interface EventosContract {
         void showEventDetailUi(int noteId,int position);
         void updateItemCheckMark(int position,boolean status);
 
+        void showMenuItens(ArrayList<Curso> cursos);
     }
 
     interface UserActionsListener {
 
         void loadEvents(boolean forceUpdate,boolean fromRefresh);
-
+        void loadMenuCursos();
 
         void openEventDetails(@NonNull Evento requestedEvent,int position);
 
         void addEventToMyList(Evento ev,int position);
+
+        void filterEventsByCourse(int id);
     }
 }
