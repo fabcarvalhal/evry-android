@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseConnecti
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
 
+
         if (null == savedInstanceState) {
             //initFragment(EventosFragment.newInstance());
         }

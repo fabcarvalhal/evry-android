@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -21,6 +22,8 @@ public class EventosActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private String titlePrefix = "<b>e</b><i>Vry</i> : ";
+    private String titleSufix = "Home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class EventosActivity extends AppCompatActivity {
         mToolbar = (Toolbar)findViewById(R.id.toolbar_main);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(Html.fromHtml("<b>e</b><i>Vry</i> : Principal"));
+        getSupportActionBar().setTitle(Html.fromHtml(titlePrefix+titleSufix));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -66,6 +69,15 @@ public class EventosActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 
+    }
+
+    public void setNavTitle(String t){
+        this.titleSufix = t;
+        getSupportActionBar().setTitle(Html.fromHtml(titlePrefix+titleSufix));
+    }
+
+    public  void closeDrawer(){
+        mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     private void initFragment(Fragment notesFragment) {

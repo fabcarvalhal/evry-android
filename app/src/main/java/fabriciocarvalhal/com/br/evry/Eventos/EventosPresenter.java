@@ -82,9 +82,85 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
                 carregando = true;
                 if (isFiltered) {
-                    NetworkConnection.getInstance(activity).conectionVolley(this, url_filtered + userid +"/"+filteredByCourse+ "/" + pagina, Request.Method.GET);
+                    NetworkConnection.getInstance(activity).conectionVolley(new ResponseConnection() {
+                        @Override
+                        public Map<String, String> doBefore() {
+                            return null;
+                        }
+
+                        @Override
+                        public void doAfter(BaseRequest object) {
+                            if(!object.isErro()) {
+                                Gson gson = new Gson();
+                                List<Evento> eventosList = new ArrayList<>();
+
+                                Evento[] eventos = gson.fromJson(object.getData().getAsJsonArray("eventos"), Evento[].class);
+                                for (Evento e : eventos) {
+                                    e.setId(e.getId());
+                                    e.setNome(e.getNome());
+                                    e.setData_fim(e.getData_fim());
+                                    e.setData_ini(e.getData_ini());
+
+                                    eventosList.add(e);
+                                }
+                                if (isUpdate) {
+                                    eventosView.showEvents(eventosList);
+                                } else {
+
+                                    eventosView.moreEvents(eventosList);
+                                }
+
+                                existNextPage = object.getHasNextPage();
+                                carregando = false;
+                                isEventLoad = false;
+                                eventosView.setProgressIndicator(false);
+                            }
+                        }
+
+                        @Override
+                        public void erroServer(VolleyError error) {
+
+                        }
+                    }, url_filtered + userid + "/" + filteredByCourse + "/" + pagina, Request.Method.GET);
                 } else {
-                    NetworkConnection.getInstance(activity).conectionVolley(this, url + userid + "/" + pagina, Request.Method.GET);
+                    NetworkConnection.getInstance(activity).conectionVolley(new ResponseConnection() {
+                        @Override
+                        public Map<String, String> doBefore() {
+                            return null;
+                        }
+
+                        @Override
+                        public void doAfter(BaseRequest object) {
+                            Gson gson = new Gson();
+                            List<Evento> eventosList = new ArrayList<>();
+
+                            Evento[] eventos = gson.fromJson(object.getData().getAsJsonArray("eventos"), Evento[].class);
+                            for (Evento e : eventos) {
+                                e.setId(e.getId());
+                                e.setNome(e.getNome());
+                                e.setData_fim(e.getData_fim());
+                                e.setData_ini(e.getData_ini());
+
+                                eventosList.add(e);
+                            }
+                            if (isUpdate) {
+                                eventosView.showEvents(eventosList);
+                            } else {
+
+                                eventosView.moreEvents(eventosList);
+                            }
+
+                            existNextPage = object.getHasNextPage();
+                            carregando = false;
+                            isEventLoad = false;
+                            eventosView.setProgressIndicator(false);
+                        }
+
+                        @Override
+                        public void erroServer(VolleyError error) {
+
+                        }
+                    }, url + userid + "/" + pagina, Request.Method.GET);
 
                 }
             }
@@ -130,10 +206,36 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
     @Override
     public void filterEventsByCourse(int id) {
-        this.isFiltered = true;
+        if(id == 0 ){
+            this.isFiltered = false;
+        }else if(id > 0){
+            this.isFiltered = true;
+        }
         this.filteredByCourse = id;
         this.loadEvents(true,false);
     }
+
+    @Override
+    public void closeDrawer() {
+        eventosView.closeDrawer();
+    }
+
+    @Override
+    public void changeNavTitle(String title) {
+        eventosView.changeNavTitle(title);
+    }
+
+    @Override
+    public void logout() {
+        this.userid = "0";
+        eventosView.logout();
+    }
+
+    @Override
+    public void loadDrawerHeader() {
+        eventosView.loadMenuHeader();
+    }
+
 
     @Override
     public Map<String, String> doBefore() {
@@ -155,31 +257,10 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
 
         if (!object.isErro()){
 
-            if (!this.isAddEvent && !this.isRemoveEvent && !this.isMenuLoad && isEventLoad) {
-                Gson gson = new Gson();
-                List<Evento> eventosList = new ArrayList<>();
-
-                Evento[] eventos = gson.fromJson(object.getData().getAsJsonArray("eventos"), Evento[].class);
-                for (Evento e : eventos) {
-                    e.setId(e.getId());
-                    e.setNome(e.getNome());
-                    e.setData_fim(e.getData_fim());
-                    e.setData_ini(e.getData_ini());
-
-                    eventosList.add(e);
-                }
-                if (isUpdate) {
-                    eventosView.showEvents(eventosList);
-                } else {
-
-                    eventosView.moreEvents(eventosList);
-                }
-
-                this.existNextPage = object.getHasNextPage();
-                carregando = false;
-                isEventLoad = false;
-                eventosView.setProgressIndicator(false);
-            }else if(this.isRemoveEvent || this.isAddEvent){
+//            if (!this.isAddEvent && !this.isRemoveEvent && !this.isMenuLoad && isEventLoad) {
+//
+//            }else
+            if(this.isRemoveEvent || this.isAddEvent){
                 if(this.isRemoveEvent){
                     eventosView.updateItemCheckMark(addingOrRemovingEventPosition,false);
                 }else if(this.isAddEvent){
@@ -194,10 +275,14 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                 Gson gson = new Gson();
                 ArrayList<Curso> cursosList = new ArrayList<>();
                 Curso[] cursos = gson.fromJson(object.getData().getAsJsonArray("cursos"), Curso[].class);
+                cursosList.add(new Curso(0,"Home"));
                 for(Curso c : cursos){
                     c.setId(c.getId());
                     c.setNome(c.getNome());
                     cursosList.add(c);
+                }
+                if(!userid.equals("0")){
+                    cursosList.add(new Curso(-1,"Sair"));
                 }
                 this.isMenuLoad = false;
                 eventosView.showMenuItens(cursosList);
@@ -237,6 +322,8 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
             }
         }
     }
+
+
 
 
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,12 +48,28 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     @Override
     public void onBindViewHolder(DrawerViewHolder holder, final int position) {
         holder.title.setText(drawerMenuList.get(position).getNome());
-        holder.icon.setImageResource(R.drawable.book);
+
+        int id = getItem(position).getId();
+        if(id == 0 ){
+            holder.icon.setImageResource(R.drawable.ic_home_black_24dp );
+        }else if(id == -1){
+            holder.icon.setImageResource(R.drawable.logout_variant);
+        }else{
+            holder.icon.setImageResource(R.drawable.book);
+        }
+
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,drawerMenuList.get(position).getNome(),Toast.LENGTH_SHORT).show();
-                mUserActionsListener.filterEventsByCourse(getItem(position).getId());
+                if(getItem(position).getId() >= 0){
+                    mUserActionsListener.closeDrawer();
+                    mUserActionsListener.changeNavTitle(getItem(position).getNome());
+                    mUserActionsListener.filterEventsByCourse(getItem(position).getId());
+                }else if (getItem(position).getId() == -1){
+                    mUserActionsListener.logout();
+                    mUserActionsListener.loadDrawerHeader();
+                }
+
             }
         });
 

@@ -27,6 +27,10 @@ public interface EventosContract {
         void updateItemCheckMark(int position,boolean status);
 
         void showMenuItens(ArrayList<Curso> cursos);
+        void closeDrawer();
+        void changeNavTitle(String title);
+        void logout();
+        void loadMenuHeader();
     }
 
     interface UserActionsListener {
@@ -39,5 +43,9 @@ public interface EventosContract {
         void addEventToMyList(Evento ev,int position);
 
         void filterEventsByCourse(int id);
+        void closeDrawer();
+        void changeNavTitle(String title);
+        void logout();
+        void loadDrawerHeader();
     }
 }

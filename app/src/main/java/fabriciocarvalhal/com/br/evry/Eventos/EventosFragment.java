@@ -6,18 +6,29 @@ package fabriciocarvalhal.com.br.evry.Eventos;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +41,7 @@ import fabriciocarvalhal.com.br.evry.model.Curso;
 import fabriciocarvalhal.com.br.evry.model.Evento;
 
 
-public class EventosFragment extends Fragment implements EventosContract.View{
+public class EventosFragment extends Fragment implements EventosContract.View, GoogleApiClient.OnConnectionFailedListener{
 
 
     private EventosContract.UserActionsListener mUserActionsListener;
@@ -42,6 +53,10 @@ public class EventosFragment extends Fragment implements EventosContract.View{
     private View view;
     private DrawerAdapter drawerAdapter;
     private RecyclerView mDrawerRecycleView;
+    private GoogleApiClient mGoogleApiClient;
+    private ImageView imUser;
+    private TextView nomeUser;
+
 
     public EventosFragment() {
         // Required empty public constructor
@@ -56,6 +71,15 @@ public class EventosFragment extends Fragment implements EventosContract.View{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity(), this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
         mUserActionsListener = new EventosPresenter(getActivity(),this);
         adapter = new EventosAdapter(getActivity(),new ArrayList<Evento>(),mUserActionsListener);
         drawerAdapter = new DrawerAdapter(getActivity(),new ArrayList<Curso>(),mUserActionsListener);
@@ -123,7 +147,8 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         mRecyclerView.setLayoutManager(llm);
 
         mRecyclerView.setAdapter(adapter);
-
+        imUser = (ImageView) getActivity().findViewById(R.id.imguser);
+        nomeUser = (TextView) getActivity().findViewById(R.id.nomeuser);
 
         LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
         llm2.setOrientation(LinearLayoutManager.VERTICAL);
@@ -194,6 +219,60 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         drawerAdapter.replaceData(cursos);
     }
 
+    @Override
+    public void closeDrawer() {
+        ((EventosActivity) getActivity()).closeDrawer();
+    }
+
+    @Override
+    public void changeNavTitle(String title) {
+        ((EventosActivity) getActivity()).setNavTitle(title);
+    }
+
+    @Override
+    public void logout() {
+
+
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if(status.isSuccess()){
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences("shared",0);
+                            sharedPref.edit().clear().apply();
+                            mUserActionsListener.loadMenuCursos();
+                        }
+
+
+                    }
+                });
+    }
+
+    @Override
+    public void loadMenuHeader() {
+
+        SharedPreferences shared = getActivity().getSharedPreferences("shared",0);
+        if(shared.contains("userid")){
+
+            if(!shared.getString("urlPhoto", "").equals("")){
+                Glide.with(getActivity()).
+                        load(shared.getString("urlPhoto","")).
+                        centerCrop().
+                        crossFade().
+                        into(this.imUser);
+            }else{
+                imUser.setBackgroundResource(R.drawable.user);
+            }
+
+            Log.i("IMG", shared.getString("urlPhoto","nao tem"));
+            nomeUser.setText(shared.getString("user_name",""));
+        }else{
+            nomeUser.setText("");
+            imUser.setBackgroundResource(R.drawable.user);
+        }
+
+    }
+
 
     @Override
     public void onResume() {
@@ -201,16 +280,21 @@ public class EventosFragment extends Fragment implements EventosContract.View{
         if (!preenchido) {
 
             mUserActionsListener.loadEvents(true, false);
-
+            mUserActionsListener.loadMenuCursos();
             preenchido = true;
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                   mUserActionsListener.loadMenuCursos();
-                }
-            }, 3000);
+
         }
 
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("shared",0);
+        if (sharedPref.contains("userid")){
+            mUserActionsListener.loadMenuCursos();
+
+        }
+        mUserActionsListener.loadDrawerHeader();
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }
