@@ -1,5 +1,6 @@
 package fabriciocarvalhal.com.br.evry.Eventos;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import fabriciocarvalhal.com.br.evry.DetalhesEvento.DetalhesEventoActivity;
 import fabriciocarvalhal.com.br.evry.R;
 
 
@@ -37,8 +42,8 @@ public class EventosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
-
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i("TOKEN", token.toString());
 
         if (null == savedInstanceState) {
             initFragment(EventosFragment.newInstance());
@@ -67,6 +72,16 @@ public class EventosActivity extends AppCompatActivity {
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        Intent intent = getIntent();
+        if (intent != null){
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey("event_id")){
+                Intent it = new Intent(this, DetalhesEventoActivity.class);
+                it.putExtra("event_id", extras.getInt("event_id"));
+                startActivity(it);
+
+            }
+        }
 
 
     }
@@ -91,8 +106,10 @@ public class EventosActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
+
     }
 
     @Override

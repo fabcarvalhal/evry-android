@@ -58,7 +58,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
         this.activity = activity;
         this.eventosView = eventosView;
         SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
-        this.userid = shared.getString("userid","0");
+        this.userid = String.valueOf(shared.getInt("userid",0));
 
     }
 

@@ -43,7 +43,7 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
         this.eventoDetalheView = eventoDetalheView;
         this.activity = activity;
         SharedPreferences shared = activity.getSharedPreferences("shared", Context.MODE_PRIVATE);
-        this.userid = shared.getString("userid","0");
+        this.userid = String.valueOf(shared.getInt("userid",0));
     }
 
 
@@ -113,7 +113,7 @@ public class DetalhesEventoPresenter implements DetalhesEventoContract.UserActio
         }else{
             this.isAddEvent = false;
             this.isRemoveEvent = false;
-            Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,object.getData().get("message").getAsString(), Toast.LENGTH_SHORT).show();
         }
 
 
