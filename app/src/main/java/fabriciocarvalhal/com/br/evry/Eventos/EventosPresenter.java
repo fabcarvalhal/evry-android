@@ -271,7 +271,7 @@ public class EventosPresenter implements ResponseConnection, EventosContract.Use
                 this.isRemoveEvent = false;
                 Toast.makeText(activity,object.getData().get("mensagem").getAsString(), Toast.LENGTH_SHORT).show();
 
-            }else if(isMenuLoad && !isEventLoad){
+            }else if(isMenuLoad){
                 Gson gson = new Gson();
                 ArrayList<Curso> cursosList = new ArrayList<>();
                 Curso[] cursos = gson.fromJson(object.getData().getAsJsonArray("cursos"), Curso[].class);

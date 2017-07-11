@@ -1,6 +1,7 @@
 package fabriciocarvalhal.com.br.evry.firebase;
 
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -23,7 +24,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
-
+        SharedPreferences sharedPref =getApplicationContext().getSharedPreferences("shared",0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("token_fcm", refreshedToken);
+        editor.commit();
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
